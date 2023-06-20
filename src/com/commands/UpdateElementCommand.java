@@ -12,7 +12,7 @@ public class UpdateElementCommand extends Command {
 
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
-        listener.groups.add(data.group);
+        listener.commands.get("add").execute(data, listener);
         return Message.createMessage("");
     }
 }

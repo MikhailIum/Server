@@ -15,20 +15,20 @@ public class SaveCommand {
 
 
     public static void execute(Listener listener) throws Exception {
-        OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(listener.FILE_PATH));
+//        OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(listener.FILE_PATH));
 
-        listener.groups.stream()
-                .forEach(
-                        group -> {
-                            try {
-                                out.write(group.getParams());
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
+//        listener.groups.stream()
+//                .forEach(
+//                        group -> {
+//                            try {
+//                                out.write(group.getParams());
+//                            } catch (IOException e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                        });
 
-        isSaved = true;
-        out.close();
+//        isSaved = true;
+//        out.close();
     }
 
     public static boolean isSaved = true;

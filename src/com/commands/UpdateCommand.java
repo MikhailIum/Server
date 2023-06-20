@@ -32,6 +32,7 @@ public class UpdateCommand extends Command {
             return message;
         }
         SaveCommand.isSaved = false;
+        listener.st.execute("DELETE FROM studygroups WHERE name = '" + toUpdate.getName() + "'");
         listener.groups.remove(toUpdate);
         return Message.createMessage(toUpdate);
     }

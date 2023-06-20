@@ -1,39 +1,43 @@
 package com.main;
 
-import com.auxiliary.CSVReader;
 import com.auxiliary.CommandMapMaker;
-import com.auxiliary.TextColor;
+import com.auxiliary.DBReader;
+import com.auxiliary.Table;
 import com.commands.Command;
 import com.commands.SaveCommand;
-import com.opencsv.bean.CsvToBeanBuilder;
 import com.study_group.StudyGroup;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import javax.sql.RowSet;
+import java.io.*;
+import java.sql.*;
 import java.util.*;
 
 public class Listener {
 
   public LinkedList<StudyGroup> groups;
-  public String FILE_PATH = System.getenv("FILE_PATH").replace("'", "");
   public Map<String, Command> commands;
-  List<CSVReader> beans;
+  public Statement st;
+  private Connection connection;
 
   public void start() {
     commands = CommandMapMaker.makeDefault();
     try {
-      FileReader fr = new FileReader(FILE_PATH);
-      beans = new CsvToBeanBuilder(fr).withType(CSVReader.class).build().parse();
-      groups = CSVReader.makeCollection(beans);
-    } catch (NullPointerException | IOException ex) {
-        System.out.println(FILE_PATH);
-      System.out.println(
-          TextColor.ANSI_YELLOW + "You should add environment variable as a path to the file:");
-      System.out.println(
-          "Write \"export FILE_PATH=(path to file)\" before starting" + TextColor.ANSI_RESET);
-      System.exit(0);
+        Properties info = new Properties();
+        info.load(new FileInputStream("db.cfg"));
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/prog", info);
+        st = connection.createStatement();
+        Table.createStudyGroupTable(st);
+
+        groups = DBReader.makeCollection(st);
+
+    } catch (SQLException e) {
+        System.out.println("Failed to connect to the database");
+        System.exit(0);
+        throw new RuntimeException(e);
+    } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+    } catch (IOException e) {
+        throw new RuntimeException(e);
     }
   }
 
@@ -54,4 +58,10 @@ public class Listener {
           });
       SaveCommand.execute(this);
   }
+
+  public void finish() throws SQLException {
+      st.close();
+      connection.close();
+  }
+
 }

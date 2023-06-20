@@ -74,7 +74,7 @@ public class Location implements Serializable {
    * @return String
    */
   public String getParams() {
-    return x + "," + y + "," + z + "," + name;
+    return "'" + name + "', " + x + ", " + y + ", " + z;
   }
 
   /**

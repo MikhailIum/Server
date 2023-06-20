@@ -26,6 +26,6 @@ public class Coordinates implements Serializable {
    * @return String
    */
   public String get_params() {
-    return x + "," + y;
+    return x + ", " + y;
   }
 }

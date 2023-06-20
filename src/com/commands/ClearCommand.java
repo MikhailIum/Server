@@ -15,6 +15,7 @@ public class ClearCommand extends Command {
 
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
+        listener.st.execute("DELETE FROM studygroups");
         listener.groups = new LinkedList<>();
         SaveCommand.isSaved = false;
         return Message.createMessage("Collection is successfully cleared!");

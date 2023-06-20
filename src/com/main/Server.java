@@ -104,6 +104,7 @@ public class Server {
         listener = new Listener();
         listener.start();
         select();
+        listener.finish();
     }
 
 }

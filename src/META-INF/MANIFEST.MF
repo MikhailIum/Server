@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 Main-Class: com.main.Server
+Class-Path: . /usr/local/share/java/classes/postgresql.jar
 

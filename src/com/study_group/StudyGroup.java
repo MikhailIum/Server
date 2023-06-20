@@ -12,7 +12,7 @@ import java.util.UUID;
 public class StudyGroup implements Serializable {
 
   private static final long serialVersionUID = 3L;
-  private final UUID id;
+  private UUID id;
   private final LocalDateTime creationDate;
   private final Person groupAdmin;
   private String name;
@@ -41,6 +41,14 @@ public class StudyGroup implements Serializable {
     this.semesterEnum = semesterEnum;
     this.creationDate = creationDate;
     this.id = id;
+  }
+
+  public void setId(UUID id){
+    this.id = id;
+  }
+
+  public UUID getId(){
+    return this.id;
   }
 
   /**
@@ -191,23 +199,18 @@ public class StudyGroup implements Serializable {
    * @return String
    */
   public String getParams() {
-    return name
-        + ","
+    return "'" + name
+        + "', "
         + coordinates.get_params()
-        + ","
-        + creationDate
-        + ","
+        + ", "
         + studentsCount
-        + ","
+        + ", "
         + expelledStudents
-        + ","
+        + ", "
         + shouldBeExpelled
-        + ","
+        + ", '"
         + Semester.find(semesterEnum)
-        + ','
-        + groupAdmin.getParams()
-        + ','
-        + id
-        + "\n";
+        + "', "
+        + groupAdmin.getParams();
   }
 }

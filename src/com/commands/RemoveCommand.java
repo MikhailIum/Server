@@ -26,6 +26,7 @@ public class RemoveCommand extends Command {
 
         StudyGroup to_remove = StudyGroup.findByName(listener.groups, data.args[1]);
         if (to_remove != null) {
+            listener.st.execute("DELETE FROM studygroups WHERE name = '" + data.args[1] + "'");
             listener.groups.remove(to_remove);
             SaveCommand.isSaved = false;
             return Message.createMessage("The group has been removed");

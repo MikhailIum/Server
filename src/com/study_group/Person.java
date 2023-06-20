@@ -112,14 +112,14 @@ public class Person implements Serializable {
    * @return String
    */
   public String getParams() {
-    return name
-        + ","
+    return "'" + name
+        + "', '"
         + birthday.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-        + ","
+        + "', '"
         + Color.find(hairColor)
-        + ","
+        + "', '"
         + Country.find(nationality)
-        + ","
+        + "', "
         + location.getParams();
   }
 

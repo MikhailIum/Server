@@ -15,6 +15,7 @@ public class RemoveFirstCommand extends Command {
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
         if (!listener.groups.isEmpty()) {
+            listener.st.execute("DELETE FROM studygroups WHERE name = '" + listener.groups.getFirst().getName() + "'");
             listener.groups.removeFirst();
             SaveCommand.isSaved = false;
             return Message.createMessage("First element has been removed");
