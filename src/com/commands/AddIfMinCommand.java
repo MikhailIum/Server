@@ -14,7 +14,7 @@ public class AddIfMinCommand extends Command {
 
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
-        if (data.args[2].compareTo(listener.groups.getFirst().getName()) > 0) {
+        if (data.args[2].compareTo(listener.groups.get(0).getName()) > 0) {
             Message message = Message.createMessage("This isn't the lowest name\n", new CollectionException());
             message.addMessage(Hint.nameHint(1, listener).text);
             return message;

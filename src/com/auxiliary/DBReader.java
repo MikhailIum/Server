@@ -9,9 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /** Reads a csv file and creates a collection using data from the file */
 public class DBReader {
@@ -50,8 +48,8 @@ public class DBReader {
 
 
   /** Makes a collection using starting file */
-  public static LinkedList<StudyGroup> makeCollection(Statement statement) throws IOException, SQLException {
-    LinkedList<StudyGroup> groups = new LinkedList<>();
+  public static List<StudyGroup> makeCollection(Statement statement) throws IOException, SQLException {
+    List<StudyGroup> groups = Collections.synchronizedList(new LinkedList<>());
     ResultSet result = statement.executeQuery("SELECT * FROM studygroups");
     while (result.next()){
       var name = DBReader.getColValue(result, 3, String.class);

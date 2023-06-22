@@ -17,11 +17,11 @@ public class RemoveFirstCommand extends Command {
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
         if (!listener.groups.isEmpty()) {
-            if (!Objects.equals(data.login, listener.groups.getFirst().getUser())){
+            if (!Objects.equals(data.login, listener.groups.get(0).getUser())){
                 return Message.createMessage("You do not have access to the groups you have not created", new CollectionException());
             }
-            listener.st.execute("DELETE FROM studygroups WHERE name = '" + listener.groups.getFirst().getName() + "'");
-            listener.groups.removeFirst();
+            listener.st.execute("DELETE FROM studygroups WHERE name = '" + listener.groups.get(0).getName() + "'");
+            listener.groups.remove(0);
             SaveCommand.isSaved = false;
             return Message.createMessage("First element has been removed");
         } else {

@@ -19,10 +19,13 @@ public class ShowCommand extends Command {
 
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
-        if (listener.groups.isEmpty())
-            return Message.createMessage("Collection is empty!!\n", new CollectionException());
-        else {
-            return Message.createMessage(listener.groups.stream().map(StudyGroup::toString).collect(Collectors.joining()));
+        while(true){
+            continue;
         }
+//        if (listener.groups.isEmpty())
+//            return Message.createMessage("Collection is empty!!\n", new CollectionException());
+//        else {
+//            return Message.createMessage(listener.groups.stream().map(StudyGroup::toString).collect(Collectors.joining()));
+//        }
     }
 }

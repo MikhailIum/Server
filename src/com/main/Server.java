@@ -8,17 +8,23 @@ import java.net.*;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 
 public class Server {
-    private static int PORT = 23909;
+    private static int PORT = 2390;
     private static Listener listener;
-    private static Message message;
+    private static Message message = null;
 
+    private static final ExecutorService executorServesForReading = Executors.newFixedThreadPool(100);
 
-    private static void select() throws Exception {
-        Selector selector = Selector.open();
+    private static void accept() throws IOException {
         ServerSocketChannel server = ServerSocketChannel.open();
         SocketAddress address = new InetSocketAddress(PORT);
         try {
@@ -27,25 +33,30 @@ public class Server {
             System.out.println("Try another port");
             System.exit(0);
         }
-        server.configureBlocking(false);
-        server.register(selector, SelectionKey.OP_ACCEPT);
-        while(true) {
-            selector.select();
-            Set<SelectionKey> keys = selector.selectedKeys();
-            for (var iter = keys.iterator(); iter.hasNext(); ) {
-                SelectionKey key = iter.next(); iter.remove();
-                if (key.isValid()) {
-                    if (key.isAcceptable()) { accept(key); }
-                    if (key.isReadable()) { read(key);}
-                    if (key.isWritable()) { write(key); }
+        server.configureBlocking(true);
+
+        while (true){
+            SocketChannel socket = server.accept();
+            System.out.println(socket);
+            executorServesForReading.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        //TODO:  true here is a really bad choice
+                        while (true) {
+                            read(socket);
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
-            }
+            });
         }
     }
 
 
-    private static void write(SelectionKey key) throws Exception {
-        var sc = (SocketChannel) key.channel();
+
+    private static void write(SocketChannel sc) throws Exception {
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
@@ -54,12 +65,11 @@ public class Server {
 
 
         sc.write(ByteBuffer.wrap(byteArrayOutputStream.toByteArray()));
-        sc.register(key.selector(), SelectionKey.OP_READ);
         listener.executeCommands();
     }
 
-    private static void read(SelectionKey key) throws Exception {
-        var sc = (SocketChannel) key.channel();
+
+    private static void read(SocketChannel sc) throws Exception {
         byte[] info = new byte[20048];
 
 
@@ -76,23 +86,25 @@ public class Server {
         } catch (Exception ex){
             return;
         }
-        message = processing((Data) objectInputStream.readObject(), sc);
-        sc.register(key.selector(), SelectionKey.OP_WRITE);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    message = processing((Data) objectInputStream.readObject(), sc);
+                    write(sc);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }).start();
     }
 
     private static Message processing(Data data, SocketChannel socket) throws Exception {
-        System.out.println("Command: " + data.commandType + ", user: " + socket.socket().getInetAddress() + ":" + socket.socket().getPort() + ", " + "login: " + data.login);
+        System.out.println("Command: " + data.commandType + ", user: " + socket.socket().getInetAddress() + ":" + socket.socket().getPort() + ", " + "login: " + data.login + ", current thread: " + Thread.currentThread().getName());
         return listener.commands.get(data.commandType).execute(data, listener);
     }
 
-    private static void accept(SelectionKey key) throws IOException {
-        var ssc = (ServerSocketChannel) key.channel();
-        SocketChannel socketChannel = ssc.accept();
-        System.out.println(socketChannel);
-
-        socketChannel.configureBlocking(false);
-        socketChannel.register(key.selector(), SelectionKey.OP_READ);
-    }
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0){
@@ -103,7 +115,7 @@ public class Server {
         }
         listener = new Listener();
         listener.start();
-        select();
+        accept();
         listener.finish();
     }
 

@@ -14,7 +14,7 @@ import java.util.*;
 
 public class Listener {
 
-  public LinkedList<StudyGroup> groups;
+  public List<StudyGroup> groups;
   public Map<String, Command> commands;
   public Statement st;
   private Connection connection;

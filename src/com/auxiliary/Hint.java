@@ -29,7 +29,7 @@ public class Hint {
         message.addMessage(listener.groups.stream()
                 .limit(listener.groups.size() - 1)
                 .map(studyGroup -> studyGroup.getName() + ", ")
-                .collect(Collectors.joining()) + listener.groups.getLast().getName() + "\n}");
+                .collect(Collectors.joining()) + listener.groups.get(listener.groups.size()-1).getName() + "\n}");
         return message;
     }
 }

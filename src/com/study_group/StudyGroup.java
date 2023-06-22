@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 /** The class of objects that are contained in the collection */
@@ -69,7 +70,7 @@ public class StudyGroup implements Serializable {
    * @param name - name of the group user wants to find
    * @return StudyGroup
    */
-  public static StudyGroup findByName(LinkedList<StudyGroup> groups, String name) {
+  public static StudyGroup findByName(List<StudyGroup> groups, String name) {
     return groups.stream().filter(group -> group.getName().equals(name)).findFirst().orElse(null);
   }
 
