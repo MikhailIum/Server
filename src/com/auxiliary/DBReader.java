@@ -78,7 +78,13 @@ public class DBReader {
 
       var creationDate = DBReader.getColValue(result, 1, LocalDateTime.class);
       var id = DBReader.getColValue(result, 2, UUID.class);
-      groups.add(new StudyGroup(name, new Coordinates(x, y), studentsCount, expelledStudents, shouldBeExpelled, semester, admin, creationDate, id));
+
+      StudyGroup toAdd = new StudyGroup(name, new Coordinates(x, y), studentsCount, expelledStudents, shouldBeExpelled, semester, admin, creationDate, id);
+
+      var username = DBReader.getColValue(result, 18, String.class);
+
+      toAdd.setUser(username);
+      groups.add(toAdd);
     }
     return groups;
   }

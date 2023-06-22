@@ -27,6 +27,7 @@ public class Listener {
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/prog", info);
         st = connection.createStatement();
         Table.createStudyGroupTable(st);
+        Table.createUsersTable(st);
 
         groups = DBReader.makeCollection(st);
 

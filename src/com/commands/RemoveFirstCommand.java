@@ -6,6 +6,8 @@ import com.auxiliary.TextColor;
 import com.main.Data;
 import com.main.Listener;
 
+import java.util.Objects;
+
 /** Removes first group from the collection(lexicographically first) */
 public class RemoveFirstCommand extends Command {
     public RemoveFirstCommand(String name, String description) {
@@ -15,6 +17,9 @@ public class RemoveFirstCommand extends Command {
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
         if (!listener.groups.isEmpty()) {
+            if (!Objects.equals(data.login, listener.groups.getFirst().getUser())){
+                return Message.createMessage("You do not have access to the groups you have not created", new CollectionException());
+            }
             listener.st.execute("DELETE FROM studygroups WHERE name = '" + listener.groups.getFirst().getName() + "'");
             listener.groups.removeFirst();
             SaveCommand.isSaved = false;

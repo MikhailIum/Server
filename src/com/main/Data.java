@@ -9,6 +9,7 @@ public class Data implements Serializable {
 
     public String commandType;
     public String[] args;
+    public String login;
 
     public StudyGroup group;
 

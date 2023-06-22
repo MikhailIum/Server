@@ -12,6 +12,7 @@ public class UpdateElementCommand extends Command {
 
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
+        data.args = new String[]{data.login};
         listener.commands.get("add").execute(data, listener);
         return Message.createMessage("");
     }

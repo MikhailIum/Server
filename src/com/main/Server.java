@@ -81,7 +81,7 @@ public class Server {
     }
 
     private static Message processing(Data data, SocketChannel socket) throws Exception {
-        System.out.println("Command: " + data.commandType + ", user: " + socket.socket().getInetAddress() + ":" + socket.socket().getPort());
+        System.out.println("Command: " + data.commandType + ", user: " + socket.socket().getInetAddress() + ":" + socket.socket().getPort() + ", " + "login: " + data.login);
         return listener.commands.get(data.commandType).execute(data, listener);
     }
 

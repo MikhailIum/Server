@@ -18,7 +18,7 @@ public class AddCommand extends Command {
         ResultSet rs = listener.st.executeQuery("SELECT * FROM gen_random_uuid ()");
         rs.next();
         data.group.setId(UUID.fromString(rs.getString(1)));
-        rs.close();
+        data.group.setUser(data.args[0]);
         String values = "('" + data.group.getCreationDate() + "', '" + data.group.getId() + "', " +
                 data.group.getParams() + ")";
         int isAddedToDB = listener.st.executeUpdate("INSERT INTO studygroups VALUES " + values);

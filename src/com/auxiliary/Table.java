@@ -51,9 +51,17 @@ public class Table {
         studyGroupsTable.addAttr("admin_location_x", "REAL");
         studyGroupsTable.addAttr("admin_location_y", "INTEGER");
         studyGroupsTable.addAttr("admin_location_z", "BIGINT");
+        studyGroupsTable.addAttr("username_created", "TEXT");
 
         studyGroupsTable.createTable(st);
     }
 
+    public static void createUsersTable(Statement st) throws SQLException {
+        Table usersTable = new Table("users");
+        usersTable.addAttr("username", "TEXT", "UNIQUE");
+        usersTable.addAttr("password", "TEXT");
+        usersTable.addAttr("addition", "TEXT");
 
+        usersTable.createTable(st);
+    }
 }

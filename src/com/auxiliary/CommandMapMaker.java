@@ -20,6 +20,8 @@ public class CommandMapMaker {
   public static Map<String, Command> makeDefault() {
     Map<String, Command> commands = new HashMap<>();
 
+    commands.put("password", new PasswordCommand("password", null));
+    commands.put("login", new LoginCommand("login", null));
     commands.put("info", new InfoCommand("info", "get info about the collection"));
     commands.put("show", new ShowCommand("show", "show all the groups"));
     commands.put("add", new AddCommand("add", "add new group"));

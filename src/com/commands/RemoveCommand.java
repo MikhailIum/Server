@@ -8,6 +8,8 @@ import com.main.Data;
 import com.main.Listener;
 import com.study_group.StudyGroup;
 
+import java.util.Objects;
+
 /** Remove an element by its name */
 public class RemoveCommand extends Command {
     public RemoveCommand(String name, String description) {
@@ -26,6 +28,9 @@ public class RemoveCommand extends Command {
 
         StudyGroup to_remove = StudyGroup.findByName(listener.groups, data.args[1]);
         if (to_remove != null) {
+            if (!Objects.equals(data.login, to_remove.getUser())){
+                return Message.createMessage("You do not have access to the groups you have not created", new CollectionException());
+            }
             listener.st.execute("DELETE FROM studygroups WHERE name = '" + data.args[1] + "'");
             listener.groups.remove(to_remove);
             SaveCommand.isSaved = false;

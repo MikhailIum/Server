@@ -1,6 +1,7 @@
 package com.commands;
 
 
+import com.auxiliary.DBReader;
 import com.auxiliary.Message;
 import com.main.Data;
 import com.main.Listener;
@@ -15,9 +16,9 @@ public class ClearCommand extends Command {
 
     @Override
     public Message execute(Data data, Listener listener) throws Exception {
-        listener.st.execute("DELETE FROM studygroups");
-        listener.groups = new LinkedList<>();
+        listener.st.execute("DELETE FROM studygroups WHERE username_created = '" + data.login + "'");
+        listener.groups = DBReader.makeCollection(listener.st);
         SaveCommand.isSaved = false;
-        return Message.createMessage("Collection is successfully cleared!");
+        return Message.createMessage("Each group you have created is deleted!");
     }
 }

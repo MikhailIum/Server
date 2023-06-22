@@ -9,6 +9,7 @@ import com.main.Listener;
 import com.study_group.StudyGroup;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 public class UpdateCommand extends Command {
     public UpdateCommand(String s, String updateGroupByItsName) {
@@ -31,9 +32,13 @@ public class UpdateCommand extends Command {
             message.addMessage(Hint.nameHint(2, listener).text);
             return message;
         }
-        SaveCommand.isSaved = false;
-        listener.st.execute("DELETE FROM studygroups WHERE name = '" + toUpdate.getName() + "'");
-        listener.groups.remove(toUpdate);
-        return Message.createMessage(toUpdate);
+        if (Objects.equals(toUpdate.getUser(), data.login)) {
+            SaveCommand.isSaved = false;
+            listener.st.execute("DELETE FROM studygroups WHERE name = '" + toUpdate.getName() + "'");
+            listener.groups.remove(toUpdate);
+            return Message.createMessage(toUpdate);
+        } else {
+            return Message.createMessage("You do not have access to the groups you have not created", new CollectionException());
+        }
     }
 }

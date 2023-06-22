@@ -22,6 +22,8 @@ public class StudyGroup implements Serializable {
   private long shouldBeExpelled;
   private Semester semesterEnum;
 
+  private String user;
+
   public StudyGroup(
       String name,
       Coordinates coordinates,
@@ -43,6 +45,15 @@ public class StudyGroup implements Serializable {
     this.id = id;
   }
 
+  public void setUser(String username){
+    this.user = username;
+  }
+
+  public String getUser(){
+    return this.user;
+  }
+
+
   public void setId(UUID id){
     this.id = id;
   }
@@ -62,36 +73,6 @@ public class StudyGroup implements Serializable {
     return groups.stream().filter(group -> group.getName().equals(name)).findFirst().orElse(null);
   }
 
-  /**
-   * Call a method from AddCommand class according to which field user wants to update
-   *
-   * @param num - number of the field user wants to update
-   */
-  public void updateField(int num) throws IOException {
-    switch (num) {
-      case (1):
-//        this.name = AddCommand.getGroupName();
-//        break;
-//      case (2):
-//        this.coordinates = AddCommand.getCoords();
-//        break;
-//      case (3):
-//        this.studentsCount = AddCommand.getStudentsCount("Number of students");
-//        break;
-//      case (4):
-//        this.expelledStudents = AddCommand.getStudentsCount("Number of expelled students");
-//        break;
-//      case (5):
-//        this.shouldBeExpelled =
-//            AddCommand.getStudentsCount("Number of students who should be expelled");
-//        break;
-//      case (6):
-//        this.semesterEnum = AddCommand.getSemester();
-        break;
-      default:
-        groupAdmin.updateField(num);
-    }
-  }
 
   public String getName() {
     return this.name;
@@ -175,8 +156,17 @@ public class StudyGroup implements Serializable {
             + "{"
             + groupAdmin.toString()
             + "\n\t}";
+    String username =
+            TextColor.ANSI_PURPLE
+                    + "\n\t"
+                    + "username"
+                    + TextColor.ANSI_WHITE
+                    + ": "
+                    + TextColor.ANSI_CYAN
+                    + user
+                    + TextColor.ANSI_RESET;
 
-    return "\n{"
+    return "\n{" + username
         + id_str
         + name_str
         + coords_str
@@ -211,6 +201,6 @@ public class StudyGroup implements Serializable {
         + ", '"
         + Semester.find(semesterEnum)
         + "', "
-        + groupAdmin.getParams();
+        + groupAdmin.getParams() + ", '" + user + "'";
   }
 }
